@@ -37,7 +37,7 @@ http-server --cors
 ## As library
 
 ````js
-var screenshot = require("./lib/screenshot");
+const screenshot = require("./lib/screenshot");
 
 const opts = {
   hvUrl: "http://gitgrimbo.github.io/harviewer/master/?har=http://localhost:8080/my-har.har",
