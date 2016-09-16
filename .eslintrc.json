@@ -1,0 +1,18 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": "google",
+  "rules": {
+    "linebreak-style": [
+      "error",
+      "windows"
+    ],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "no-return-assign": 0
+  }
+}
