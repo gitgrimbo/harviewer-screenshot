@@ -50,6 +50,12 @@ const opts = {
 screenshot.screenshot(opts);
 ````
 
+# Development
+
+## Linting
+
+`npm run lint`
+
 # TODO
 
 - In-built HTTP server to serve local HAR files.
@@ -59,8 +65,6 @@ screenshot.screenshot(opts);
   - Custom pre-processing of HARs
     - Filter `har.log.pages` (E.g. if HAR has several pages but you're only interested in one/some).
 
-# Development
+# License
 
-## Linting
-
-`npm run lint`
+MIT © [Paul Grime](https://github.com/gitgrimbo/)
