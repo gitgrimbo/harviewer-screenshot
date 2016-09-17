@@ -50,6 +50,12 @@ Creating page
 Opening http://gitgrimbo.github.io/harviewer/master/?har=http://localhost:3933/c:/path/to/local-file.har
 ````
 
+### Serve HAR file from stdin
+
+E.g. (on Windows):
+
+`type x.har | harviewer-screenshot`
+
 ## As library
 
 ````js

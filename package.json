@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "file-url": "^1.1.0",
+    "get-stdin": "^5.0.1",
     "kcors": "^1.2.1",
     "koa": "^1.2.4",
     "koa-send": "^3.2.0",

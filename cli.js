@@ -1,5 +1,6 @@
+const getStdin = require("get-stdin");
 const buildArgv = require("./lib/build-argv");
-const { mapPathToUrl, splitIntoPathsAndUrls } = require("./lib/har-paths");
+const { mapPathToUrl, splitIntoPathsAndUrls, stdinUrl } = require("./lib/har-paths");
 const screenshot = require("./lib/screenshot");
 const { createServer } = require("./lib/server");
 
@@ -14,11 +15,12 @@ function params(name, values) {
   return values.map(v => name + "=" + v).join("&");
 }
 
+function readHARFromStdin() {
+  return getStdin().then(str => JSON.parse(str));
+}
+
 function main(cli) {
   const argv = cli.argv;
-  if (!argv.har && !argv.harp) {
-    return cli.showHelp();
-  }
 
   function doScreenshot(hars, harps) {
     const url = argv["hv-url"] + "?" +
@@ -41,8 +43,8 @@ function main(cli) {
     });
   }
 
-  function useLocalServer(harPathsAndUrls, harpPathsAndUrls) {
-    const server = createServer();
+  function useLocalServer(harPathsAndUrls, harpPathsAndUrls, harFromStdin) {
+    const server = createServer(harFromStdin);
     const stopServer = err => {
       if (err) {
         console.error(err);
@@ -55,9 +57,20 @@ function main(cli) {
 
       console.log(`Started local server on port ${port}`);
 
+      const hars = [];
+      const harps = [];
+
       const pathToUrlMapper = mapPathToUrl("http:", "localhost", port);
-      const hars = harPathsAndUrls.urls.concat(harPathsAndUrls.paths.map(pathToUrlMapper));
-      const harps = harPathsAndUrls.urls.concat(harpPathsAndUrls.paths.map(pathToUrlMapper));
+      if (harPathsAndUrls) {
+        hars.push(harPathsAndUrls.urls.concat(harPathsAndUrls.paths.map(pathToUrlMapper)));
+      }
+      if (harpPathsAndUrls) {
+        harps.push(harpPathsAndUrls.urls.concat(harpPathsAndUrls.paths.map(pathToUrlMapper)));
+      }
+
+      if (harFromStdin) {
+        hars.push(stdinUrl("http:", "localhost", port));
+      }
 
       return doScreenshot(hars, harps);
     }).then(stopServer, stopServer);
@@ -66,11 +79,19 @@ function main(cli) {
   const harPathsAndUrls = splitIntoPathsAndUrls(ensureArray(argv.har));
   const harpPathsAndUrls = splitIntoPathsAndUrls(ensureArray(argv.harp));
 
-  if (harPathsAndUrls.paths.length > 0 || harpPathsAndUrls.paths.length > 0) {
-    useLocalServer(harPathsAndUrls, harpPathsAndUrls);
-  } else {
-    doScreenshot(harPathsAndUrls.urls, harpPathsAndUrls.urls);
+  const isPaths = harPathsAndUrls.paths.length > 0 || harpPathsAndUrls.paths.length > 0;
+  const isUrls = harPathsAndUrls.urls.length > 0 || harpPathsAndUrls.urls.length > 0;
+
+  if (isPaths) {
+    return useLocalServer(harPathsAndUrls, harpPathsAndUrls);
   }
+
+  if (isUrls) {
+    // No paths (but URLs), so don't need the local server
+    return doScreenshot(harPathsAndUrls.urls, harpPathsAndUrls.urls);
+  }
+
+  return readHARFromStdin().then(har => useLocalServer(null, null, har));
 }
 
 const cli = buildArgv();
