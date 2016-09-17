@@ -14,7 +14,7 @@ Options:
             [required] [default: "http://gitgrimbo.github.io/harviewer/master/"]
   --har               HAR URL or file path. Can be provided zero or more times.
   --harp              HARP URL or file path. Can be provided zero or more times.
-  --hv-pageIdx        Index of the page to open.                    [default: 0]
+  --hv-page-idx       Index of the page to open.                    [default: 0]
   --hv-width          Width of viewport.                         [default: 1280]
   --hv-height         Height of viewport. Defaults to full
                       document.body.clientHeight.
@@ -26,7 +26,7 @@ Options:
 
 ### Serve HAR files from standalone server
 
-`harviewer-screenshot --har http://localhost:8080/hars/myhar.har --hv-pageIdx 4 --hv-width 1024`
+`harviewer-screenshot --har http://localhost:8080/hars/myhar.har --hv-page-idx 4 --hv-width 1024`
 
 The HAR URL must point to a server supporting CORS.  `http-server` can be
 used to serve local files with CORS.  For example:

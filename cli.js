@@ -29,7 +29,7 @@ function main(cli) {
 
     const opts = {
       hvUrl: url,
-      hvPageIdx: argv["hv-pageIdx"],
+      hvPageIdx: argv["hv-page-idx"],
       hvWidth: argv["hv-width"],
       hvHeight: argv["hv-height"],
       hvShowStats: argv["hv-show-stats"],
