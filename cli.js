@@ -32,6 +32,8 @@ function main(cli) {
       hvPageIdx: argv["hv-pageIdx"],
       hvWidth: argv["hv-width"],
       hvHeight: argv["hv-height"],
+      hvShowStats: argv["hv-show-stats"],
+      hvShowTimeline: argv["hv-show-timeline"],
       dest: argv.dest
     };
 

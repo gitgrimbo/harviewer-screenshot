@@ -10,15 +10,18 @@ Take screenshots of [HAR Viewer](https://github.com/janodvarko/harviewer).
 harviewer-screenshot --help
 
 Options:
-  --hv-url      HAR Viewer URL.
+  --hv-url            HAR Viewer URL.
             [required] [default: "http://gitgrimbo.github.io/harviewer/master/"]
-  --har         HAR URL or file path. Can be provided zero or more times.
-  --harp        HARP URL or file path. Can be provided zero or more times.
-  --hv-pageIdx  Index of the page to open.                          [default: 0]
-  --hv-width    Width of viewport.                               [default: 1280]
-  --hv-height   Height of viewport. Defaults to full document.body.clientHeight.
-  --dest        Filename for the screenshot.          [default: "harviewer.png"]
-  --help        Show help                                              [boolean]
+  --har               HAR URL or file path. Can be provided zero or more times.
+  --harp              HARP URL or file path. Can be provided zero or more times.
+  --hv-pageIdx        Index of the page to open.                    [default: 0]
+  --hv-width          Width of viewport.                         [default: 1280]
+  --hv-height         Height of viewport. Defaults to full
+                      document.body.clientHeight.
+  --hv-show-stats     Show the stats or not.          [boolean] [default: false]
+  --hv-show-timeline  Show the timeline or not.       [boolean] [default: false]
+  --dest              Filename for the screenshot.    [default: "harviewer.png"]
+  --help              Show help                                        [boolean]
 ````
 
 ### Serve HAR files from standalone server
