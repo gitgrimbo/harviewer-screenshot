@@ -1,41 +1,17 @@
-const fs = require("fs");
-const path = require("path");
-const url = require("url");
-const fileUrl = require("file-url");
 const buildArgv = require("./lib/build-argv");
+const { mapPathToUrl, splitIntoPathsAndUrls } = require("./lib/har-paths");
 const screenshot = require("./lib/screenshot");
 const { createServer } = require("./lib/server");
 
-function localAndRemote(paths) {
-  const ctx = {
-    local: [],
-    remote: []
-  };
-  return paths.reduce((ctx, p) => {
-    const { protocol } = url.parse(p);
-
-    if (protocol) {
-      ctx.remote.push(p);
-    } else {
-      const resolvedPath = path.resolve(p);
-      const stats = fs.statSync(resolvedPath);
-      if (stats.isFile()) {
-        ctx.local.push(resolvedPath);
-      } else {
-        throw new Error(p + " was neither a file nor a URL");
-      }
-    }
-
-    return ctx;
-  }, ctx);
+function ensureArray(value) {
+  if (typeof value === "undefined" || value === null) {
+    return [];
+  }
+  return Array.isArray(value) ? value : [value];
 }
 
-function mapFilePathToLocalUrl(port) {
-  return function(path) {
-    const u = fileUrl(path);
-    const parsed = url.parse(u);
-    return "http://localhost:" + port + parsed.pathname;
-  };
+function params(name, values) {
+  return values.map(v => name + "=" + v).join("&");
 }
 
 function main(cli) {
@@ -44,23 +20,10 @@ function main(cli) {
     return cli.showHelp();
   }
 
-  function ensureArray(value) {
-    if (typeof value === "undefined" || value === null) {
-      return [];
-    }
-    return Array.isArray(value) ? value : [value];
-  }
-
-  function params(name, values) {
-    return values.map(v => name + "=" + v).join("&");
-  }
-
-  function doScreenshot(har, harp) {
+  function doScreenshot(hars, harps) {
     const url = argv["hv-url"] + "?" +
-      params("har", har.local) +
-      params("harp", harp.local) +
-      params("har", har.remote) +
-      params("harp", harp.remote);
+      params("har", hars) +
+      params("harp", harps);
 
     const opts = {
       hvUrl: url,
@@ -78,7 +41,7 @@ function main(cli) {
     });
   }
 
-  function useLocalServer(har, harp) {
+  function useLocalServer(harPathsAndUrls, harpPathsAndUrls) {
     const server = createServer();
     const stopServer = err => {
       if (err) {
@@ -92,20 +55,21 @@ function main(cli) {
 
       console.log(`Started local server on port ${port}`);
 
-      har.local = har.local.map(mapFilePathToLocalUrl(port));
-      harp.local = harp.local.map(mapFilePathToLocalUrl(port));
+      const pathToUrlMapper = mapPathToUrl("http:", "localhost", port);
+      const hars = harPathsAndUrls.urls.concat(harPathsAndUrls.paths.map(pathToUrlMapper));
+      const harps = harPathsAndUrls.urls.concat(harpPathsAndUrls.paths.map(pathToUrlMapper));
 
-      return doScreenshot(har, harp);
+      return doScreenshot(hars, harps);
     }).then(stopServer, stopServer);
   }
 
-  const har = localAndRemote(ensureArray(argv.har));
-  const harp = localAndRemote(ensureArray(argv.harp));
+  const harPathsAndUrls = splitIntoPathsAndUrls(ensureArray(argv.har));
+  const harpPathsAndUrls = splitIntoPathsAndUrls(ensureArray(argv.harp));
 
-  if (har.local.length > 0 || harp.local.length > 0) {
-    useLocalServer(har, harp);
+  if (harPathsAndUrls.paths.length > 0 || harpPathsAndUrls.paths.length > 0) {
+    useLocalServer(harPathsAndUrls, harpPathsAndUrls);
   } else {
-    doScreenshot(har, harp);
+    doScreenshot(harPathsAndUrls.urls, harpPathsAndUrls.urls);
   }
 }
 
