@@ -7,7 +7,7 @@ Take screenshots of [HAR Viewer](https://github.com/janodvarko/harviewer).
 ## From the command line
 
 ````
-node index.js
+harviewer-screenshot --help
 
 Options:
   --hv-url      HAR Viewer URL.
@@ -23,7 +23,7 @@ Options:
 
 ### Serve HAR files from standalone server
 
-`node index.js --har http://localhost:8080/hars/myhar.har --hv-pageIdx 4 --hv-width 1024`
+`harviewer-screenshot --har http://localhost:8080/hars/myhar.har --hv-pageIdx 4 --hv-width 1024`
 
 The HAR URL must point to a server supporting CORS.  `http-server` can be
 used to serve local files with CORS.  For example:
@@ -39,7 +39,7 @@ http-server --cors
 If the `--har` argument is a valid file path, a local HTTP server is started
 to serve this file to HAR Viewer. E.g.:
 
-`node index.js --har local-file.har`
+`harviewer-screenshot --har local-file.har`
 
 will start a HTTP server (on a random available port) and output something
 like the following:

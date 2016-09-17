@@ -2,7 +2,7 @@
   "name": "harviewer-screenshot",
   "version": "1.0.0",
   "description": "Take screenshots of HAR Viewer",
-  "main": "index.js",
+  "bin": "./bin/harviewer-screenshot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ."
