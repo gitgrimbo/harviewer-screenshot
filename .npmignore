@@ -1,0 +1,6 @@
+.npmignore
+.vscode
+**/*.test.js
+*.png
+*.har
+*.tgz
