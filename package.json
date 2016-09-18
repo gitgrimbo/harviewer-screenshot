@@ -1,18 +1,16 @@
 {
   "name": "harviewer-screenshot",
-  "version": "1.0.0",
   "description": "Take screenshots of HAR Viewer",
-  "bin": "./bin/harviewer-screenshot.js",
-  "scripts": {
-    "lint": "eslint .",
-    "test": "./node_modules/.bin/mocha --recursive ./lib/**/*.test.js"
-  },
+  "version": "1.0.0",
   "author": {
     "name": "Paul Grime",
     "email": "gitgrimbo@gmail.com",
     "url": "https://github.com/gitgrimbo"
   },
-  "license": "MIT",
+  "bin": "./bin/harviewer-screenshot.js",
+  "bugs": {
+    "url": "https://github.com/gitgrimbo/harviewer-screenshot/issues"
+  },
   "dependencies": {
     "file-url": "^1.1.0",
     "get-stdin": "^5.0.1",
@@ -28,12 +26,21 @@
     "eslint-config-google": "^0.6.0",
     "mocha": "^3.0.2"
   },
+  "homepage": "https://github.com/gitgrimbo/harviewer-screenshot#readme",
+  "keywords": [
+    "har",
+    "harviewer",
+    "screenshot",
+    "viewer"
+  ],
+  "license": "MIT",
+  "main": "./index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gitgrimbo/harviewer-screenshot.git"
   },
-  "bugs": {
-    "url": "https://github.com/gitgrimbo/harviewer-screenshot/issues"
-  },
-  "homepage": "https://github.com/gitgrimbo/harviewer-screenshot#readme"
+  "scripts": {
+    "lint": "eslint .",
+    "test": "./node_modules/.bin/mocha --recursive ./lib/**/*.test.js"
+  }
 }
