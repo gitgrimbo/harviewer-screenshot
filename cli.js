@@ -1,6 +1,7 @@
+const url = require("url");
 const getStdin = require("get-stdin");
 const buildArgv = require("./lib/build-argv");
-const { mapPathToUrl, splitIntoPathsAndUrls, stdinUrl } = require("./lib/har-paths");
+const { getHarsAndHarps, splitIntoPathsAndUrls } = require("./lib/har-paths");
 const screenshot = require("./lib/screenshot");
 const { createServer } = require("./lib/server");
 
@@ -11,10 +12,6 @@ function ensureArray(value) {
   return Array.isArray(value) ? value : [value];
 }
 
-function params(name, values) {
-  return values.map(v => name + "=" + v).join("&");
-}
-
 function readHARFromStdin() {
   return getStdin().then(str => JSON.parse(str));
 }
@@ -23,12 +20,14 @@ function main(cli) {
   const argv = cli.argv;
 
   function doScreenshot(hars, harps) {
-    const url = argv["hv-url"] + "?" +
-      params("har", hars) +
-      params("harp", harps);
+    let hvUrl = url.parse(argv["hv-url"]);
+    hvUrl.query = {
+      har: hars,
+      harp: harps
+    };
 
     const opts = {
-      hvUrl: url,
+      hvUrl: url.format(hvUrl),
       hvPageIdx: argv["hv-page-idx"],
       hvWidth: argv["hv-width"],
       hvHeight: argv["hv-height"],
@@ -59,22 +58,11 @@ function main(cli) {
 
       console.log(`Started local server on port ${port}`);
 
-      const hars = [];
-      const harps = [];
+      const harsAndHarps = getHarsAndHarps(harPathsAndUrls, harpPathsAndUrls, harFromStdin, {
+        port
+      });
 
-      const pathToUrlMapper = mapPathToUrl("http:", "localhost", port);
-      if (harPathsAndUrls) {
-        hars.push(harPathsAndUrls.urls.concat(harPathsAndUrls.paths.map(pathToUrlMapper)));
-      }
-      if (harpPathsAndUrls) {
-        harps.push(harpPathsAndUrls.urls.concat(harpPathsAndUrls.paths.map(pathToUrlMapper)));
-      }
-
-      if (harFromStdin) {
-        hars.push(stdinUrl("http:", "localhost", port));
-      }
-
-      return doScreenshot(hars, harps);
+      return doScreenshot(harsAndHarps.hars, harsAndHarps.harps);
     }).then(stopServer, stopServer);
   }
 

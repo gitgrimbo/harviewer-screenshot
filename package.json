@@ -4,8 +4,8 @@
   "description": "Take screenshots of HAR Viewer",
   "bin": "./bin/harviewer-screenshot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "./node_modules/.bin/mocha --recursive ./lib/**/*.test.js"
   },
   "author": {
     "name": "Paul Grime",
@@ -23,8 +23,10 @@
     "yargs": "^5.0.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "eslint": "^3.4.0",
-    "eslint-config-google": "^0.6.0"
+    "eslint-config-google": "^0.6.0",
+    "mocha": "^3.0.2"
   },
   "repository": {
     "type": "git",
