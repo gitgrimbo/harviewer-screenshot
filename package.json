@@ -26,6 +26,9 @@
     "eslint-config-google": "^0.6.0",
     "mocha": "^3.0.2"
   },
+  "engines": {
+    "node": ">=6"
+  },
   "homepage": "https://github.com/gitgrimbo/harviewer-screenshot#readme",
   "keywords": [
     "har",
