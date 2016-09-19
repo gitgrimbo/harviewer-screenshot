@@ -1,4 +1,3 @@
-const url = require("url");
 const getStdin = require("get-stdin");
 const buildArgv = require("./lib/build-argv");
 const { getHarsAndHarps, splitIntoPathsAndUrls } = require("./lib/har-paths");
@@ -20,14 +19,10 @@ function main(cli) {
   const argv = cli.argv;
 
   function doScreenshot(hars, harps) {
-    let hvUrl = url.parse(argv["hv-url"]);
-    hvUrl.query = {
-      har: hars,
-      harp: harps
-    };
-
     const opts = {
-      hvUrl: url.format(hvUrl),
+      hars,
+      harps,
+      hvUrl: argv["hv-url"],
       hvPageIdx: argv["hv-page-idx"],
       hvWidth: argv["hv-width"],
       hvHeight: argv["hv-height"],
