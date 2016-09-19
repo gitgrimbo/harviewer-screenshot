@@ -17,12 +17,12 @@
     "kcors": "^1.2.1",
     "koa": "^1.2.4",
     "koa-send": "^3.2.0",
-    "phantom": "^2.1.19",
+    "phantom": "^2.1.21",
     "yargs": "^5.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "eslint": "^3.4.0",
+    "eslint": "^3.5.0",
     "eslint-config-google": "^0.6.0",
     "mocha": "^3.0.2"
   },
