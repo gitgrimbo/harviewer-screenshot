@@ -1,7 +1,7 @@
 {
   "name": "harviewer-screenshot",
   "description": "Take screenshots of HAR Viewer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Paul Grime",
     "email": "gitgrimbo@gmail.com",
