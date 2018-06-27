@@ -18,7 +18,7 @@ function startServer(harFromStdin, cb) {
       const resolved = path.resolve(p);
       const parsed = path.parse(resolved);
       yield send(this, parsed.base, {
-        root: parsed.dir
+        root: parsed.dir,
       });
     }
   }
@@ -35,16 +35,16 @@ function createServer(harFromStdin) {
     start() {
       return new Promise((resolve, reject) => {
         server = startServer(harFromStdin, function() {
-          resolve(this);
+          resolve(server);
         });
       });
     },
     stop() {
-      server.close();
-    }
+      return server.close();
+    },
   };
 }
 
 module.exports = {
-  createServer
+  createServer,
 };

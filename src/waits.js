@@ -20,7 +20,7 @@ function repeatUntilTruthy(delay, timeout, fn) {
     function next() {
       // console.log("repeat.next", delay, timeout);
       setTimeout(function() {
-        fn().then(result => {
+        fn().then((result) => {
           // console.log("repeat.result", delay, timeout, result);
           if (result) {
             // console.log("repeat.resolve", delay, timeout, typeof result, result);
@@ -41,5 +41,5 @@ function repeatUntilTruthy(delay, timeout, fn) {
 module.exports = {
   delay,
   timeout,
-  repeatUntilTruthy
+  repeatUntilTruthy,
 };

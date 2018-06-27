@@ -1,23 +1,25 @@
 const path = require("path");
 const assert = require("chai").assert;
+
 const { getHarsAndHarps, localServerDefaults, mapPathToUrl, stdinUrl } = require("../har-paths");
 
 // These values are deliberately not localServerDefaults.
 const localServer = {
   protocol: "https:",
   hostname: "localserver.com",
-  port: 123
+  port: 123,
 };
 
 const pathToUrlMapper = mapPathToUrl(localServer.protocol, localServer.hostname, localServer.port);
-const defaultPathToUrlMapper = mapPathToUrl(localServerDefaults.protocol, localServerDefaults.hostname, localServerDefaults.port);
+const defaultPathToUrlMapper = mapPathToUrl(localServerDefaults.protocol,
+  localServerDefaults.hostname, localServerDefaults.port);
 
 const urls = [
-  "http://example.com/1.har"
+  "http://example.com/1.har",
 ];
 
 const paths = [
-  path.resolve("/path/to/file")
+  path.resolve("/path/to/file"),
 ];
 
 describe("har-paths", function() {
@@ -38,7 +40,8 @@ describe("har-paths", function() {
       const har = {};
       const actual = getHarsAndHarps(null, null, har, null);
       assertHarsAndHarps(actual, 1, 0);
-      assert.equal(actual.hars[0], stdinUrl(localServerDefaults.protocol, localServerDefaults.hostname, localServerDefaults.port));
+      assert.equal(actual.hars[0], stdinUrl(localServerDefaults.protocol,
+        localServerDefaults.hostname, localServerDefaults.port));
       assert.equal(actual.hars[0], "http://localhost:80/stdin");
     });
 

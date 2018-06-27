@@ -1,8 +1,9 @@
 const getStdin = require("get-stdin");
-const buildArgv = require("./lib/build-argv");
-const { getHarsAndHarps, splitIntoPathsAndUrls } = require("./lib/har-paths");
-const screenshot = require("./lib/screenshot");
-const { createServer } = require("./lib/server");
+
+const buildArgv = require("./build-argv");
+const { getHarsAndHarps, splitIntoPathsAndUrls } = require("./har-paths");
+const { createServer } = require("./server");
+const screenshot = require("../screenshot");
 
 function ensureArray(value) {
   if (typeof value === "undefined" || value === null) {
@@ -11,14 +12,18 @@ function ensureArray(value) {
   return Array.isArray(value) ? value : [value];
 }
 
-function readHARFromStdin() {
-  return getStdin().then(str => JSON.parse(str));
+async function readHARFromStdin() {
+  const str = await getStdin();
+  if (!str) {
+    return null;
+  }
+  return JSON.parse(str);
 }
 
-function main(cli) {
+async function main(cli) {
   const argv = cli.argv;
 
-  function doScreenshot(hars, harps) {
+  async function doScreenshot(hars, harps) {
     const opts = {
       hars,
       harps,
@@ -28,37 +33,35 @@ function main(cli) {
       hvHeight: argv["hv-height"],
       hvShowStats: argv["hv-show-stats"],
       hvShowTimeline: argv["hv-show-timeline"],
-      dest: argv.dest
+      dest: argv.dest,
     };
 
-    return screenshot.screenshot(opts).then(() => {
+    try {
+      await screenshot.screenshot(opts);
       console.log("Screenshot done.");
-    }, err => {
+    } catch (err) {
       console.error("There was an error trying to capture screenshot...");
       console.error(err);
-    });
+    }
   }
 
-  function useLocalServer(harPathsAndUrls, harpPathsAndUrls, harFromStdin) {
-    const server = createServer(harFromStdin);
-    const stopServer = err => {
-      if (err) {
-        console.error(err);
-      }
-      console.log("Stopping local server.");
-      server.stop();
-    };
-    return server.start().then(function(server) {
+  async function useLocalServer(harPathsAndUrls, harpPathsAndUrls, harFromStdin) {
+    const { start, stop } = createServer(harFromStdin);
+
+    try {
+      const server = await start();
       const port = server.address().port;
-
       console.log(`Started local server on port ${port}`);
-
       const harsAndHarps = getHarsAndHarps(harPathsAndUrls, harpPathsAndUrls, harFromStdin, {
-        port
+        port,
       });
-
-      return doScreenshot(harsAndHarps.hars, harsAndHarps.harps);
-    }).then(stopServer, stopServer);
+      await doScreenshot(harsAndHarps.hars, harsAndHarps.harps);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      console.log("Stopping local server.");
+      stop();
+    }
   }
 
   const harPathsAndUrls = splitIntoPathsAndUrls(ensureArray(argv.har));
@@ -76,8 +79,19 @@ function main(cli) {
     return doScreenshot(harPathsAndUrls.urls, harpPathsAndUrls.urls);
   }
 
-  return readHARFromStdin().then(har => useLocalServer(null, null, har));
+  const har = await readHARFromStdin();
+  if (har) {
+    return useLocalServer(null, null, har);
+  } else {
+    console.error("har not provided in stdin");
+  }
 }
 
-const cli = buildArgv();
-main(cli);
+(async function() {
+  try {
+    const cli = buildArgv();
+    await main(cli);
+  } catch (err) {
+    console.error(err);
+  }
+}());

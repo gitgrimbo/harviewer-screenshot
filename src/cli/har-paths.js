@@ -32,7 +32,7 @@ function splitIntoPathsAndUrls(pathsAndUrls) {
 
   const ctx = {
     paths: [],
-    urls: []
+    urls: [],
   };
 
   return pathsAndUrls.reduce((ctx, p) => {
@@ -78,7 +78,7 @@ function stdinUrl(protocol, hostname, port) {
 const localServerDefaults = {
   protocol: "http:",
   hostname: "localhost",
-  port: 80
+  port: 80,
 };
 
 function getHarsAndHarps(harPathsAndUrls, harpPathsAndUrls, harFromStdin, localServer) {
@@ -91,12 +91,15 @@ function getHarsAndHarps(harPathsAndUrls, harpPathsAndUrls, harFromStdin, localS
   let hars = [];
   let harps = [];
 
-  const pathToUrlMapper = mapPathToUrl(localServer.protocol, localServer.hostname, localServer.port);
+  const pathToUrlMapper = mapPathToUrl(localServer.protocol,
+    localServer.hostname, localServer.port);
+
   if (harPathsAndUrls) {
     const urls = harPathsAndUrls.urls || [];
     const paths = harPathsAndUrls.paths || [];
     hars = hars.concat(urls.concat(paths.map(pathToUrlMapper)));
   }
+
   if (harpPathsAndUrls) {
     const urls = harpPathsAndUrls.urls || [];
     const paths = harpPathsAndUrls.paths || [];
@@ -109,7 +112,7 @@ function getHarsAndHarps(harPathsAndUrls, harpPathsAndUrls, harFromStdin, localS
 
   return {
     hars,
-    harps
+    harps,
   };
 }
 
@@ -118,5 +121,5 @@ module.exports = {
   localServerDefaults,
   mapPathToUrl,
   splitIntoPathsAndUrls,
-  stdinUrl
+  stdinUrl,
 };

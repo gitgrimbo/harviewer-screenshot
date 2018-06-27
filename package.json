@@ -1,30 +1,41 @@
 {
   "name": "harviewer-screenshot",
   "description": "Take screenshots of HAR Viewer",
-  "version": "1.0.2",
+  "version": "1.0.3-beta.0",
   "author": {
     "name": "Paul Grime",
     "email": "gitgrimbo@gmail.com",
     "url": "https://github.com/gitgrimbo"
   },
   "bin": "./bin/harviewer-screenshot.js",
+  "files": [
+    "bin",
+    "lib"
+  ],
   "bugs": {
     "url": "https://github.com/gitgrimbo/harviewer-screenshot/issues"
   },
   "dependencies": {
-    "file-url": "^1.1.0",
-    "get-stdin": "^5.0.1",
+    "babel-runtime": "^6.26.0",
+    "file-url": "^2.0.2",
+    "get-stdin": "^6.0.0",
     "kcors": "^1.2.1",
     "koa": "^1.2.4",
     "koa-send": "^3.2.0",
-    "phantom": "^2.1.21",
+    "puppeteer": "^1.5.0",
     "yargs": "^5.0.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "^3.5.0",
-    "eslint-config-google": "^0.6.0",
-    "mocha": "^3.0.2"
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.1.2",
+    "cpx": "^1.5.0",
+    "eslint": "^5.0.1",
+    "eslint-config-google": "^0.9.1",
+    "mocha": "^5.2.0",
+    "rimraf": "^2.6.2"
   },
   "engines": {
     "node": ">=6"
@@ -37,13 +48,13 @@
     "viewer"
   ],
   "license": "MIT",
-  "main": "./index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gitgrimbo/harviewer-screenshot.git"
   },
   "scripts": {
-    "lint": "eslint .",
-    "test": "./node_modules/.bin/mocha --recursive ./lib/**/*.test.js"
+    "build": "rimraf ./lib && cpx ./src/evaluate-on-browser.js ./lib/ && babel src -d lib",
+    "lint": "eslint src",
+    "test": "./node_modules/.bin/mocha --recursive ./src/**/*.test.js"
   }
 }

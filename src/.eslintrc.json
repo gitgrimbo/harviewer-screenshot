@@ -1,0 +1,33 @@
+{
+  "env": {
+    "es6": true,
+    "mocha": true,
+    "node": true
+  },
+  "extends": "google",
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "rules": {
+    "generator-star-spacing": 0,
+    "linebreak-style": [
+      "error",
+      "windows"
+    ],
+    "max-len": [
+      "error",
+      100
+    ],
+    "no-return-assign": 0,
+    "no-undef": "error",
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "require-jsdoc": 0
+  }
+}
