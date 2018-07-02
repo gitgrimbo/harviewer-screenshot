@@ -25,9 +25,9 @@ async function screenshot(opts) {
 
   let browser = null;
 
-  function cleanup(err) {
+  async function cleanup(err) {
     if (browser) {
-      browser.close();
+      await browser.close();
     }
     if (err) {
       throw err;
@@ -84,11 +84,11 @@ async function screenshot(opts) {
     await page.screenshot({ path: dest });
 
     console.log("Cleanup");
-    cleanup();
+    await cleanup();
   } catch (err) {
     console.log("ERROR", err);
     console.log("Cleanup");
-    cleanup(err);
+    await cleanup(err);
   }
 }
 
